@@ -1,0 +1,17 @@
+[1,2,3,4]
+int acumulador= 0;
+for(int i =0; i < lista.length; i++){
+	acumulador += lista[i];
+}
+
+-- foldl ( b -> a -> b) -> b -> t a -> b
+-- foldl (\ b a -> b + a) 0 [1..5]
+
+
+foldl (+) 0 [1..5] = []
+foldl (0 -> 1 -> 0 + 1) 0  [2,3,4,5] = 
+foldl (1 -> 2 -> 1 + 2) 3  [3,4,5] = 
+foldl (3 -> 3 -> 3 + 3) 6  [4,5] = 
+foldl (6 -> 4 -> 6 + 4) 10 [5] = 
+foldl (10 -> 5 -> 10 + 5) 15 [] = 15
+

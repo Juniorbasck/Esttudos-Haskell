@@ -1,0 +1,25 @@
+[ x | x<-[1,2,3,4,5], even x ] = []
+[ 1 | 1<-[2,3,4,5], false ] = [] 
+[ 2 | 2<-[3,4,5], True] = 2 : 
+[ 3 | 3<-[4,5], False] = 2 :
+[ 4 | 4<-[5], True] = 2 : 4 : 
+[ 5 | 5<-[], False] 
+	= 2 : 4 : [] = [2,4]
+
+
+
+public Pessoa{
+	private Strig nome;
+
+        ...
+
+
+       public String saudacao(){
+	   return this.nome;
+
+	}
+
+
+
+
+}

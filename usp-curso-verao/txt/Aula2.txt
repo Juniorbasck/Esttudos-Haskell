@@ -1,0 +1,500 @@
+
+PS C:\Users\aula.VELIKANOVA-W.000> ghci
+GHCi, version 9.4.8: https://www.haskell.org/ghc/  :? for help
+ghci> let xs = [1..5]
+ghci> xs
+[1,2,3,4,5]
+ghci> reverse xs
+[5,4,3,2,1]
+ghci> [ x | x <-xs, mod 2 x == 0 ]
+[1,2]
+ghci>
+ghci> xs
+[1,2,3,4,5]
+ghci> [ x | x <-xs, mod x 2 == 0 ]
+[2,4]
+ghci> [ x | x <-xs, x `mod` 2 == 0 ]
+[2,4]
+ghci> [ x | x <-xs, even x ]        
+[2,4]
+ghci> :t [ x | x <-xs, even x ]
+[ x | x <-xs, even x ] :: Integral a => [a]
+ghci> [ x + 1 | x <-xs, even x ]
+[3,5]
+ghci> :t [ x + 1 | x <-xs, even x ]
+[ x + 1 | x <-xs, even x ] :: Integral a => [a]
+ghci> :t [ x  | x <-xs, even x ]   
+[ x  | x <-xs, even x ] :: Integral a => [a]
+ghci> :t xs
+xs :: (Num a, Enum a) => [a]
+ghci> [ even xxs | x <-xs, even x ]
+
+<interactive>:15:8: error:
+    Variable not in scope: xxs
+    Suggested fix: Perhaps use `xs' (line 1)
+ghci> xs
+[1,2,3,4,5]
+ghci> [ e | x <-xs, even x ]       
+
+<interactive>:17:3: error: Variable not in scope: e
+ghci> [ x | x <-xs, even x ]
+[2,4]
+ghci> [ even x | x <-xs, even x ]  
+[True,True]
+ghci> :t [ even x | x <-xs, even x ]
+[ even x | x <-xs, even x ] :: [Bool]
+ghci> [ (x,y) | x<-[1,2,3], y<-[1,2] ] 
+[(1,1),(1,2),(2,1),(2,2),(3,1),(3,2)]
+ghci> [ (x,y,z) | x<-[1,2,3], y<-[1,2], z<-[1,2] ]   
+[(1,1,1),(1,1,2),(1,2,1),(1,2,2),(2,1,1),(2,1,2),(2,2,1),(2,2,2),(3,1,1),(3,1,2),(3,2,1),(3,2,2)]
+ghci> [ (x*4,y*5, 1 + z) | x<-[1,2,3], y<-[1,2], z<-[1,2] ] 
+[(4,5,2),(4,5,3),(4,10,2),(4,10,3),(8,5,2),(8,5,3),(8,10,2),(8,10,3),(12,5,2),(12,5,3),(12,10,2),(12,10,3)]
+ghci> [ (x*4,y*5, 1 + z) | x<-[1,2,3], y<-[True,False], z<-[1,2] ] 
+
+<interactive>:24:9: error:
+    * Could not deduce (Num Bool) arising from a use of `*'
+      from the context: (Num a, Num c)
+        bound by the inferred type of
+                   it :: (Num a, Num c) => [(a, Bool, c)]
+        at <interactive>:24:1-60
+    * In the expression: y * 5
+      In the expression: (x * 4, y * 5, 1 + z)
+      In the expression:
+        [(x * 4, y * 5, 1 + z) |
+           x <- [1, 2, 3], y <- [True, False], z <- [1, 2]]
+ghci> [ (x*4,y, 1 + z) | x<-[1,2,3], y<-[True,False], z<-[1,2] ]   
+[(4,True,2),(4,True,3),(4,False,2),(4,False,3),(8,True,2),(8,True,3),(8,False,2),(8,False,3),(12,True,2),(12,True,3),(12,False,2),(12,False,3)]
+ghci> [ (x,y, 1 + z) | x<-"OlaMundo", y<-[True,False], z<-[1,2] ] 
+[('O',True,2),('O',True,3),('O',False,2),('O',False,3),('l',True,2),('l',True,3),('l',False,2),('l',False,3),('a',True,2),('a',True,3),('a',False,2),('a',False,3),('M',True,2),('M',True,3),('M',False,2),('M',False,3),('u',True,2),('u',True,3),('u',False,2),('u',False,3),('n',True,2),('n',True,3),('n',False,2),('n',False,3),('d',True,2),('d',True,3),('d',False,2),('d',False,3),('o',True,2),('o',True,3),('o',False,2),('o',False,3)]
+ghci> [ (x,y, 1 + z) | x<-[[],[]], y<-[True,False], z<-[1,2] ]    
+[([],True,2),([],True,3),([],False,2),([],False,3),([],True,2),([],True,3),([],False,2),([],False,3)]
+ghci> [ (x,y, 1 + z) | x<-[[1],[3]], y<-[True,False], z<-[1,2] ] 
+[([1],True,2),([1],True,3),([1],False,2),([1],False,3),([3],True,2),([3],True,3),([3],False,2),([3],False,3)]
+ghci> [ (x,y, 1 + z) | x<-[[1,34],[3]], y<-[True,False], z<-[1,2] ] 
+[([1,3,4],True,2),([1,3,4],True,3),([1,3,4],False,2),([1,3,4],False,3),([3],True,2),([3],True,3),([3],False,2),([3],False,3)]
+ghci> [ (x,y, 1 + z) | x<-[[1,3,4],[(3,4)]], y<-[True,False], z<-[1,2] ]
+
+<interactive>:30:1: error:
+    * No instance for (Num (Integer, Integer))
+        arising from a use of `it'
+    * In the first argument of `print', namely `it'
+      In a stmt of an interactive GHCi command: print it
+ghci> [ (x,y, 1 + z) | x<-[[1,3,4],[(3,4)]], y<-[True,False], z<-[1,2] ]
+
+<interactive>:31:1: error:
+    * No instance for (Num (Integer, Integer))
+        arising from a use of `it'
+    * In the first argument of `print', namely `it'
+      In a stmt of an interactive GHCi command: print it
+ghci> [ (x,y, 1 + z) | x<-[[1,3,4],[(3,4)]], y<-[True,False], z<-[1,2] ]
+
+<interactive>:32:1: error:
+    * No instance for (Num (Integer, Integer))
+        arising from a use of `it'
+    * In the first argument of `print', namely `it'
+      In a stmt of an interactive GHCi command: print it
+ghci> [ (x,y, 1 + z) | x<-[[1,3,4],[3]], y<-[True,False], z<-[1,2] ]
+
+[([1,3,4],True,2),([1,3,4],True,3),([1,3,4],False,2),([1,3,4],False,3),([3],True,2),([3],True,3),([3],False,2),([3],False,3)]
+ghci> [ (x,y, 1 + z) | x<-[[1,3,4],[(3,4)]], y<-[True,False], z<-[1,2] ]
+
+<interactive>:34:1: error:
+    * No instance for (Num (Integer, Integer))
+        arising from a use of `it'
+    * In the first argument of `print', namely `it'
+      In a stmt of an interactive GHCi command: print it
+ghci> [ (x,y,z) | x<-[[1,3,4],[3]], y<-[True,False], z<-[1,2] ]     
+[([1,3,4],True,1),([1,3,4],True,2),([1,3,4],False,1),([1,3,4],False,2),([3],True,1),([3],True,2),([3],False,1),([3],False,2)]
+ghci> [ (x,y, z) | x<-[[1,3,4],[3]], y<-[True,False], z<-[1,2] ] 
+[([1,3,4],True,1),([1,3,4],True,2),([1,3,4],False,1),([1,3,4],False,2),([3],True,1),([3],True,2),([3],False,1),([3],False,2)]
+ghci> let tupla = (1,2)
+ghci> :t tupla
+tupla :: (Num a, Num b) => (a, b)
+ghci> :t (,)
+(,) :: a -> b -> (a, b)
+ghci> :t (1,)
+(1,) :: Num t1 => t2 -> (t1, t2)
+ghci> :t (,,) 
+(,,) :: a -> b -> c -> (a, b, c)
+ghci> :t (1,) 
+(1,) :: Num t1 => t2 -> (t1, t2)
+ghci> :t ((1::Int),)
+((1::Int),) :: t -> (Int, t)
+ghci> :t ((1::Int),"ADSADSDSDS")
+((1::Int),"ADSADSDSDS") :: (Int, String)
+ghci> :t ((1::Int),True)        
+((1::Int),True) :: (Int, Bool)
+ghci> fst (1,"OLA") 
+1
+ghci> scd (1,"OLA")
+
+<interactive>:47:1: error:
+    Variable not in scope: scd :: (a0, String) -> t
+    Suggested fix:
+      Perhaps use one of these:
+        `gcd' (imported from Prelude), `snd' (imported from Prelude)ghci> sdn (1,"OLA")
+
+<interactive>:48:1: error:
+    Variable not in scope: sdn :: (a0, String) -> t
+    Suggested fix:
+      Perhaps use one of these:
+        `sin' (imported from Prelude), `snd' (imported from Prelude)ghci> snd (1,"OLA")
+"OLA"
+ghci> :t fst
+fst :: (a, b) -> a
+ghci> :t sdc
+<interactive>:1:1: error: Variable not in scope: sdc     
+ghci> :t snd
+snd :: (a, b) -> b
+ghci> let dobro a = a * 2
+ghci> dobro 2
+4
+ghci> dobro 3
+6
+ghci> let dobro a = a * 2
+ghci> :l main
+target `main' is not a module name or a source file      
+ghci> :q
+Leaving GHCi.
+PS C:\Users\aula.VELIKANOVA-W.000> dir
+
+
+    Diretório: C:\Users\aula.VELIKANOVA-W.000
+
+
+Mode                 LastWriteTime         Length Name   
+----                 -------------         ------ ----   
+d-----        15/11/2022     15:52                .idler 
+                                                  c      
+d-----        08/01/2024     20:18                .stack
+d-----        08/01/2024     20:23                .vscod 
+                                                  e      
+d-r---        17/03/2022     13:51                3D Obj 
+                                                  ects   
+d-r---        17/03/2022     13:51                Contac 
+                                                  ts     
+d-r---        09/01/2024     20:21                Deskto 
+                                                  p      
+d-r---        15/08/2023     15:37                Docume 
+                                                  nts    
+d-r---        09/01/2024     19:09                Downlo 
+                                                  ads    
+d-r---        17/03/2022     13:51                Favori 
+d-r---        02/12/2023     16:44                Pictur 
+                                                  es     
+d-r---        17/03/2022     13:51                Saved  
+d-r---        17/03/2022     13:51                Search 
+                                                  es     
+d-r---        31/05/2023     15:06                Videos 
+
+
+PS C:\Users\aula.VELIKANOVA-W.000> cd .\Desktop\
+PS C:\Users\aula.VELIKANOVA-W.000\Desktop> cd .\Haskell\ 
+PS C:\Users\aula.VELIKANOVA-W.000\Desktop\Haskell> main  
+PS C:\Users\aula.VELIKANOVA-W.000\Desktop\Haskell> main  
+PS C:\Users\aula.VELIKANOVA-W.000\Desktop\Haskell> ghc   
+ghc-9.4.8.exe: no input files
+Usage: For basic information, try the `--help' option.   
+PS C:\Users\aula.VELIKANOVA-W.000\Desktop\Haskell> ^C    
+PS C:\Users\aula.VELIKANOVA-W.000\Desktop\Haskell> ghci  
+GHCi, version 9.4.8: https://www.haskell.org/ghc/  :? for help
+ghci> :l main.hs 
+[1 of 2] Compiling Main             ( main.hs, interpreted )
+Ok, one module loaded.
+ghci> :t terceiro
+terceiro :: (a, b, c) -> c
+ghci> :t somar
+somar :: Int -> Int -> Int
+ghci> terceiro (1,"a",True)
+True
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> somar 1 2
+4
+ghci> somar 1 3
+*** Exception: main.hs:4:1-13: Non-exhaustive patterns in function somar
+
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> somar 1 3
+4
+ghci> :t (++)
+(++) :: [a] -> [a] -> [a]
+ghci> :t (:)
+(:) :: a -> [a] -> [a]
+ghci> 2 : 4 : []
+[2,4]
+ghci> [] : 2 : 4 
+
+<interactive>:13:1: error:
+    * No instance for (Num [[()]]) arising from a use of 
+`it'
+    * In the first argument of `print', namely `it'      
+      In a stmt of an interactive GHCi command: print it 
+ghci> 2 : 4 : [] 
+[2,4]
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> saudacao "Palmeiras'
+
+<interactive>:16:21: error:
+    lexical error in string/character literal at end of input
+ghci> saudacao "Palmeiras"
+
+<interactive>:17:1: error:
+    Variable not in scope: saudacao :: String -> t       
+ghci> saudacao "Palmeiras"
+
+<interactive>:18:1: error:
+    Variable not in scope: saudacao :: String -> t       
+ghci> :l main.hs 
+[1 of 2] Compiling Main             ( main.hs, interpreted )
+Ok, one module loaded.
+ghci> saudacao "Palmeiras"
+"Nao tem Mundial"
+ghci> saudacao "Felipe"   
+"Ola: Felipe"
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> foo (1,10)
+1
+ghci> foo (10,1) 
+2
+ghci> foo (10,10)
+20
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+
+main.hs:37:1: error:
+    parse error (possibly incorrect indentation or mismatched brackets)
+Failed, no modules loaded.
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted )
+Ok, one module loaded.
+ghci> let xs = [1..5]
+ghci> patternLista xs
+1
+ghci> patternLista [1]
+1
+ghci> patternLista [1,2]
+1
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> patternLista [1,2]
+1
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> patternLista [1,2]
+2
+ghci> patternLista [1,2,3]
+3
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> xs
+
+<interactive>:38:1: error: Variable not in scope: xs     
+ghci> let xs = [1..5]
+ghci> :t co
+compare    concatMap  cos
+concat     const      cosh
+ghci> :t count
+
+<interactive>:1:1: error: Variable not in scope: count   
+ghci> :t length 
+length :: Foldable t => t a -> Int
+ghci> length xs 
+5
+ghci> xs !! 1
+2
+ghci> xs
+[1,2,3,4,5]
+ghci> xs !! 0
+1
+ghci> xs !! 6
+*** Exception: Prelude.!!: index too large
+CallStack (from HasCallStack):
+  error, called at libraries\base\GHC\List.hs:1368:14 in base:GHC.List
+  tooLarge, called at libraries\base\GHC\List.hs:1378:50 in base:GHC.List
+  !!, called at <interactive>:46:4 in interactive:Ghci6
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+
+main.hs:26:15: error:
+    * The constructor of a newtype must have exactly one field
+        but `Foo' has none
+    * In the definition of data constructor `Foo'
+      In the newtype declaration for `Foo'
+   |
+26 | newtype Foo = Foo
+   |               ^^^
+Failed, no modules loaded.
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted )        
+Ok, one module loaded.
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> Verdadeiro
+
+<interactive>:50:1: error:
+    * No instance for (Show Booleano) arising from a use of `print' 
+    * In a stmt of an interactive GHCi command: print it
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> Verdadeiro
+Verdadeiro
+ghci> :t Verdadeiro 
+Verdadeiro :: Booleano
+ghci> :t Falso      
+Falso :: Booleano
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> numeroPar 1
+Falso
+ghci> numeroPar 2
+Verdadeiro
+ghci> numeroPar 3
+Falso
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> :r
+Ok, one module loaded.
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> con
+concat                       const
+concatMap                    conversaoDeBooleanoParaBool
+ghci> conversaoDeBooleanoParaBool Verdadeiro
+True
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> Banana 5
+Banana 5
+ghci> Banana 5.0
+
+<interactive>:65:8: error:
+    * No instance for (Fractional Int) arising from the literal `5.0'
+    * In the first argument of `Banana', namely `5.0'
+      In the expression: Banana 5.0
+      In an equation for `it': it = Banana 5.0
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> Banana 5.0
+Banana 5.0
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> Banana 5.5 "Amarela"
+Banana 5.5 "Amarela"
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> getPeso (Ba     
+
+<interactive>:71:12: error:
+    parse error (possibly incorrect indentation or mismatched brackets)
+ghci> ?r
+
+<interactive>:72:1: error: parse error on input `?'
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> getPeso (Banana 5.5 "Amarela"(
+
+<interactive>:74:31: error:
+    parse error (possibly incorrect indentation or mismatched brackets)
+ghci> getPeso (Banana 5.5 "Amarela")
+
+<interactive>:75:1: error:
+    Variable not in scope: getPeso :: Fruta -> t
+    Suggested fix: Perhaps use `getPreco' (line 30)
+ghci> :r
+Ok, one module loaded.
+ghci> getPeso (Banana 5.5 "Amarela")
+
+<interactive>:77:1: error:
+    Variable not in scope: getPeso :: Fruta -> t
+    Suggested fix: Perhaps use `getPreco' (line 30)
+ghci> getPreco (Banana 5.5 "Amarela")
+5.5
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> setPreco 8 (Banana 5.5 "Amarela")
+Banana 8.0 "Amarela"
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> let fruta = Banana 5.5 "Verde" 
+ghci> :t peso
+peso :: Fruta -> Float
+ghci> peso fruta
+5.5
+ghci> :r
+[1 of 2] Compiling Main             ( main.hs, interpreted ) [Source file changed]
+Ok, one module loaded.
+ghci> :t frutas
+frutas :: [Fruta]
+ghci> [ preco fruta | fruta <- frutas]
+
+<interactive>:87:3: error:
+    Variable not in scope: preco :: Fruta -> a
+ghci> [ peso fruta | fruta <- frutas] 
+[5.5,2.0,3.0]
+ghci> max [ peso fruta | fruta <- frutas ]
+
+<interactive>:89:1: error:
+    * No instance for (Show ([Float] -> [Float]))
+        arising from a use of `print'
+        (maybe you haven't applied a function to enough arguments?) 
+    * In a stmt of an interactive GHCi command: print it
+ghci> max [ peso fruta | fruta <- frutas ]
+
+<interactive>:90:1: error:
+    * No instance for (Show ([Float] -> [Float]))
+        arising from a use of `print'
+        (maybe you haven't applied a function to enough arguments?) 
+    * In a stmt of an interactive GHCi command: print it
+ghci> :t max
+max :: Ord a => a -> a -> a
+ghci> maximum [ peso fruta | fruta <- frutas ]
+5.5
+ghci> sum [ peso fruta | fruta <- frutas ]    
+10.5
+ghci> foldl (+1) 0 [1..5]
+
+<interactive>:94:8: error:
+    * Couldn't match type `b' with `a0 -> b'
+      Expected: b -> a0 -> b
+        Actual: b -> b
+      `b' is a rigid type variable bound by
+        the inferred type of it :: b
+        at <interactive>:94:1-19
+    * In the first argument of `foldl', namely `(+ 1)'
+      In the expression: foldl (+ 1) 0 [1 .. 5]
+      In an equation for `it': it = foldl (+ 1) 0 [1 .. 5]
+    * Relevant bindings include it :: b (bound at <interactive>:94:1)
+ghci> foldl (+) 0 [1..5] 
+15
+ghci> sum [ peso fruta |  @(Banana _ _)<- frutas ]
+
+<interactive>:96:21: error: parse error on input `@'
+ghci> sum [ peso fruta |  fruta@(Banana _ _)<- frutas ]
+5.5
+ghci> [ peso fruta |  fruta@(Banana _ _)<- frutas ]    
+[5.5]
+ghci> [fruta |  fruta@(Banana _ _)<- frutas ]      
+[Banana {peso = 5.5, cor = "Verde"}]
